@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <f:view contentType="text/html">
+        
+
+        <h:head>
+            <title>Payment gateway for MediterraneanCoin</title>
+        </h:head>
+        <h:body>
+            
+            
+            <h:form>
+                
+            
+                <p:layout fullPage="true">
+
+                    <p:layoutUnit position="north" size="300" resizable="true" closable="true" collapsible="true">
+                        
+                        Hello user #{param["first_name"]} #{param["last_name"]}, <br/>
+                        
+                        <br/>
+
+                        <p:panelGrid columns="2"  >  
+                            <f:facet name="header">  
+                                    <p:outputLabel value="your order information"     />  
+                            </f:facet>  
+
+
+
+                            <p:outputLabel value="currency" />
+                            <p:outputLabel value="#{param['currency_code']}" />              
+
+                            <p:outputLabel value="amount" />
+                            <p:outputLabel value="#{param['amount']}" />     
+
+                            <p:outputLabel value="email" />
+                            <p:outputLabel value="#{param['email']}" />     
+
+                            <p:outputLabel value="order number" />
+                            <p:outputLabel value="#{param['item_number']}" />    
+                            
+                            <p:outputLabel value="item name" />
+                            <p:outputLabel value="#{param['item_name']}" />                                
+
+
+                        </p:panelGrid>
+                        
+
+                        
+                        
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                        &nbsp;
+                    </p:layoutUnit>
+
+        
+/*
+param currency_code: MED 
+param state: TS 
+param address2:  
+param zip: 34100 
+param address1: Via test 1 
+param item_number: 10 
+param country: IT 
+param city: Trieste 
+param amount: 950 
+param first_name: Marco 
+param email: admin@netlawsrl.com 
+param merchant_id: 1234 
+param item_name: Payment for order - 10 
+param last_name: T. 
+ */  
+
+                    <p:layoutUnit position="center">
+                        
+                        #{paymentSessionBean.setAmountDue(param['amount'])}
+                        #{paymentSessionBean.setOrderNumber(param['item_number'])}
+                        
+                        <p:poll interval="15"   
+                                listener="#{paymentSessionBean.checkForPayment}" update="paymentstatus" />                          
+                        
+                        <p:panelGrid columns="2"  >  
+                            <f:facet name="header">  
+                                    <p:outputLabel value="Please perform the following payment to complete the buying process:"     />  
+                            </f:facet>                              
+                            
+                            
+                            <p:outputLabel value="payment address:" />
+                            <p:outputLabel value="#{paymentSessionBean.newPaymentAddress}" />    
+                            
+                            <p:outputLabel value="amount due:" />
+                            <p:outputLabel value="#{param['amount']}" />                                
+                            
+                            <p:outputLabel value="payment address timestamp:" />
+                            <p:outputLabel value="#{paymentSessionBean.paymentSessionAddressTimestamp}" /> 
+                            
+                            <p:outputLabel value="payment status:" />
+                            <p:outputLabel value="#{paymentSessionBean.paymentCheckStatus}" id="paymentstatus" />                              
+                            
+                        </p:panelGrid>
+                        
+                        
+                        
+                    </p:layoutUnit>
+
+                </p:layout>
+                
+            </h:form>
+                
+                
+        </h:body>
+        
+    </f:view>        
+        
+</html>
+
